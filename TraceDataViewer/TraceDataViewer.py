@@ -6,6 +6,7 @@ Version: V1.0
 20.09.2019
 copyright Markus Rychlik ©2019
 """
+
 import sys
 from matplotlib import pyplot as plt
 import pandas as pd
@@ -144,6 +145,8 @@ FileNameStr = 'WaageA_nonSlip_03.txt'
 DateiBereinigen(PathNameStr, FileNameStr, kurvenDaten,
                 removeChar='\x00', replaceByChar='', removeEmptyLine='\n')
 
+handles=[]
+labels=[]
 
 Zeitstempel = []
 Nettogewicht = []
@@ -213,11 +216,23 @@ ax1.set_ylim([-2, 30])
 for tick in ax1.get_xticklabels():
     tick.set_rotation(45)
 
+
+""" 
+plt.legend(handles=[ax1], bbox_to_anchor=(2, 2),
+           bbox_transform=plt.gcf().transFigure)
+"""
+
 ax2.plot(Entleersignal,
          lw=0.5, label='Entleersignal', color='blue')
 
+
+""" 
+plt.legend(handles=[ax2], bbox_to_anchor=(1, 1))
+           #bbox_transform=plt.gcf().transFigure)
+"""
 ax3.plot(Grobsignal,
          lw=0.5, label='Grobsignal', color='green')
+
 
 ax4.plot(Feinsignal,
          lw=0.5, label='Feinsignal', color='black')
@@ -230,13 +245,17 @@ ax6.plot(Grobabschaltpunkt,
 
 ax7.plot(Nettoprozessgewicht,
          lw=0.5, label='Nettoprozessgewicht', color='purple')
+
+
+plt.legend()
+
 #ax2.set_ylim([0, 1])
 #ax2.set_yticks([0, 1])
 
 #ax2.set_xticks(np.arange(0, maxLengthTimeStp, 250))
 
 
-plt.legend()
+
 
 
 plt.grid(linestyle='-.', linewidth='0.25', color='green')
@@ -245,6 +264,7 @@ plt.show()
 
 
 # csv Datei anlegen und alle Werte speichern
+
 ''' 
 NamenZusatz_2 = '_cleanFile_01'
 
