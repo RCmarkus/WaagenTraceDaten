@@ -6,14 +6,14 @@ Version: V1.0
 20.09.2019
 copyright Markus Rychlik ©2019
 """
-
+import sys
 from matplotlib import pyplot as plt
 import pandas as pd
 import datetime as dt
 from collections import defaultdict
 import csv
 import numpy as np
-
+from tkinter import messagebox as msgBox 
 
 kurvenDaten = defaultdict(list)
 
@@ -21,7 +21,7 @@ kurvenDaten = defaultdict(list)
 # --------------Datei einlesen und bereinigen--------------
 
 
-def DateiBereinigen(Dateiname, Dict_Name, removeChar=None, replaceByChar=None, removeEmptyLine=None):
+def DateiBereinigen(PathName, FileName, Dict_Name, removeChar=None, replaceByChar=None, removeEmptyLine=None):
     """
     Mit dieser Function wird die Datei eingelesen und bestimmte 
     Zeichen entfernt.\n
@@ -33,13 +33,20 @@ def DateiBereinigen(Dateiname, Dict_Name, removeChar=None, replaceByChar=None, r
     """
     ListName = []
     Spalte_main = []
-
+    Dateiname = PathName + FileName
     # Datei öffnen und alle nicht benötigten Zeichen entfernen
-    with open(Dateiname, 'r') as txt_File:
-        for n in txt_File:
-            # alle nicht benötigten Zeichen entfernen
-            textStr = n.replace(removeChar, replaceByChar)
-            ListName.append(textStr)
+    try:
+        with open(Dateiname, 'r') as txt_File:
+            for n in txt_File:
+                # alle nicht benötigten Zeichen entfernen
+                textStr = n.replace(removeChar, replaceByChar)
+                ListName.append(textStr)
+    except:
+        msgBox.showerror("WARNING","not possible to open File\n" + FileNameStr)
+        sys.exit()
+
+
+
 
     # aus einer Liste ein dictionary schreiben
     row = 0
@@ -131,9 +138,12 @@ DateiBereinigen('EigeneProgramme\TraceDaten\spalten.txt', SpaltenNamen,
                 SplitChar='\n,', oldChar_1=' ', oldChar_2='\\n', replaceByChar_1='')
 
 """
+PathNameStr = 'TraceDataViewer\\TraceDaten\\'
+FileNameStr = 'WaageA_nonSlip_03.txt'
 # jetzt die eigenliche TraceDatei bereinigen
-DateiBereinigen('LearnPaython_Class\EigeneProgramme\TraceDaten\WaageA_nonSlip_03.txt', kurvenDaten,
+DateiBereinigen(PathNameStr, FileNameStr, kurvenDaten,
                 removeChar='\x00', replaceByChar='', removeEmptyLine='\n')
+
 
 Zeitstempel = []
 Nettogewicht = []
@@ -144,6 +154,8 @@ ungefilterterADC_Wert = []
 Grobsignal = []
 Feinsignal = []
 WartenAufStillstand = []
+Nettoprozessgewicht=[]
+
 
 ZeitstempelAuslesen(kurvenDaten, 'Zeitstempel', Zeitstempel)
 
@@ -158,6 +170,9 @@ werteAuslesen(kurvenDaten, 'gefilterter Digitwert',
 
 werteAuslesen(kurvenDaten, 'ungefilterter ADC Wert',
               ungefilterterADC_Wert, isSignalStatus='No')
+
+werteAuslesen(kurvenDaten, 'Nettoprozessgewicht',
+              Nettoprozessgewicht, isSignalStatus='No')
 
 werteAuslesen(kurvenDaten, 'Entleersignal',
               Entleersignal, isSignalStatus='Yes')
@@ -189,6 +204,7 @@ ax3 = ax1.twiny()
 ax4 = ax1.twiny()
 ax5 = ax1.twiny()
 ax6 = ax1.twiny()
+ax7 = ax1.twiny()
 
 ax1.plot(timeLine, Nettogewicht,
          lw=0.5, label='Nettogewicht', color='red')
@@ -207,10 +223,13 @@ ax4.plot(Feinsignal,
          lw=0.5, label='Feinsignal', color='black')
 
 ax5.plot(WartenAufStillstand,
-         lw=0.5, label='Warten auf Stillstand', color='yellow')
+         lw=0.5, label='WartenAufStillstand', color='yellow')
 
 ax6.plot(Grobabschaltpunkt,
-         lw=0.5, label='Warten auf Stillstand', color='orange')
+         lw=0.5, label='Grobabschaltpunkt', color='orange')
+
+ax7.plot(Nettoprozessgewicht,
+         lw=0.5, label='Nettoprozessgewicht', color='purple')
 #ax2.set_ylim([0, 1])
 #ax2.set_yticks([0, 1])
 
