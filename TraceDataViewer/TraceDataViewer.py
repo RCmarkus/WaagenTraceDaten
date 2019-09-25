@@ -209,7 +209,7 @@ ax5 = ax1.twiny()
 ax6 = ax1.twiny()
 ax7 = ax1.twiny()
 
-ax1.plot(timeLine, Nettogewicht,
+ax1.plot(timeLine, Nettogewicht, timeLine, Entleersignal, timeLine, Grobsignal,
          lw=0.5, label='Nettogewicht', color='red')
 ax1.set_xticks(np.arange(0, timeLine[-1], 1000))
 ax1.set_ylim([-2, 30])
@@ -220,16 +220,17 @@ for tick in ax1.get_xticklabels():
 """ 
 plt.legend(handles=[ax1], bbox_to_anchor=(2, 2),
            bbox_transform=plt.gcf().transFigure)
-"""
+
 
 ax2.plot(Entleersignal,
          lw=0.5, label='Entleersignal', color='blue')
-
+"""
 
 """ 
 plt.legend(handles=[ax2], bbox_to_anchor=(1, 1))
            #bbox_transform=plt.gcf().transFigure)
-"""
+
+
 ax3.plot(Grobsignal,
          lw=0.5, label='Grobsignal', color='green')
 
@@ -245,7 +246,7 @@ ax6.plot(Grobabschaltpunkt,
 
 ax7.plot(Nettoprozessgewicht,
          lw=0.5, label='Nettoprozessgewicht', color='purple')
-
+"""
 
 plt.legend()
 
