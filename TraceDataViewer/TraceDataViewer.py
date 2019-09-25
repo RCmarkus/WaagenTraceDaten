@@ -9,12 +9,13 @@ copyright Markus Rychlik ©2019
 
 import sys
 from matplotlib import pyplot as plt
+from matplotlib.widgets import Cursor
 import pandas as pd
 import datetime as dt
 from collections import defaultdict
 import csv
 import numpy as np
-from tkinter import messagebox as msgBox 
+from tkinter import messagebox as msgBox
 
 kurvenDaten = defaultdict(list)
 
@@ -43,11 +44,9 @@ def DateiBereinigen(PathName, FileName, Dict_Name, removeChar=None, replaceByCha
                 textStr = n.replace(removeChar, replaceByChar)
                 ListName.append(textStr)
     except:
-        msgBox.showerror("WARNING","not possible to open File\n" + FileNameStr)
+        msgBox.showerror(
+            "WARNING", "not possible to open File\n" + FileNameStr)
         sys.exit()
-
-
-
 
     # aus einer Liste ein dictionary schreiben
     row = 0
@@ -94,11 +93,11 @@ def ZeitstempelAuslesen(Dict_Name, KeyString, timeList):
         Liste = timeStp.split('.')
         try:
             microsek = Liste[1]
-            millisek = int(microsek)//1000
+            millisek = int(microsek)//100
             millisek = str(millisek)
             timeList.append(Liste[0] + '.' + millisek)
         except:  # Sonderfall bei 0000 Microsekunden
-            timeList.append(Liste[0] + '.000')
+            timeList.append(Liste[0] + '.00')
 
 
 def werteAuslesen(Dict_Name, KeyString, ValueList, isSignalStatus=('No', 'Yes')):
@@ -133,33 +132,34 @@ def werteAuslesen(Dict_Name, KeyString, ValueList, isSignalStatus=('No', 'Yes'))
                 ValueList.append(0)
 
 
-"""
-# als erstes die Datei mit den Spaltennamen bereinigen
-DateiBereinigen('EigeneProgramme\TraceDaten\spalten.txt', SpaltenNamen,
-                SplitChar='\n,', oldChar_1=' ', oldChar_2='\\n', replaceByChar_1='')
-
-"""
-PathNameStr = 'TraceDataViewer\\TraceDaten\\'
-FileNameStr = 'WaageA_nonSlip_03.txt'
+PathNameStr = 'TraceDataViewer\\TraceDaten\\'  # nur zum Test in Python
+# PathNameStr = 'TraceDaten\\' #für die .exe Datei
+FileNameStr = 'WaageA_TraceData.txt'
+#FileNameStr = 'WaageA_TestProd.txt'
 # jetzt die eigenliche TraceDatei bereinigen
 DateiBereinigen(PathNameStr, FileNameStr, kurvenDaten,
                 removeChar='\x00', replaceByChar='', removeEmptyLine='\n')
 
-handles=[]
-labels=[]
 
+#
+# ---------------------- Kurven auswerten und anlegen ----------------------------------
+#
+
+
+# Listen für Kurven anlegen
 Zeitstempel = []
 Nettogewicht = []
+Nettoprozessgewicht = []
 Grobabschaltpunkt = []
+Feinabschaltpunkt = []
 Entleersignal = []
-gefilterter_Digitwert = []
-ungefilterterADC_Wert = []
 Grobsignal = []
 Feinsignal = []
 WartenAufStillstand = []
-Nettoprozessgewicht=[]
+gefilterter_Digitwert = []
+ungefilterterADC_Wert = []
 
-
+# Zeitstempel auslesen
 ZeitstempelAuslesen(kurvenDaten, 'Zeitstempel', Zeitstempel)
 
 werteAuslesen(kurvenDaten, 'Nettoprozessgewicht',
@@ -167,6 +167,9 @@ werteAuslesen(kurvenDaten, 'Nettoprozessgewicht',
 
 werteAuslesen(kurvenDaten, 'Grobabschaltpunkt',
               Grobabschaltpunkt, isSignalStatus='No')
+
+werteAuslesen(kurvenDaten, 'Feinabschaltpunkt',
+              Feinabschaltpunkt, isSignalStatus='No')
 
 werteAuslesen(kurvenDaten, 'gefilterter Digitwert',
               gefilterter_Digitwert, isSignalStatus='No')
@@ -195,87 +198,67 @@ timeLine = []
 timeTick = 0
 for n in range(maxLengthTimeStp):
     timeLine.append(timeTick)
-    timeTick += 10
+    timeTick += 1
 
-sampel_time = pd.DataFrame(Zeitstempel)
-sampel_time
-#lastTimeTick = int(timeLine)
 
 fig, ax1 = plt.subplots()
-ax2 = ax1.twiny()
-ax3 = ax1.twinx()
-ax4 = ax1.twinx()
-ax5 = ax1.twinx()
-ax6 = ax1.twinx()
-ax7 = ax1.twinx()
-
+plt.subplots_adjust(left=0.05, right=0.95, top=0.95, bottom=0.10)
 ax1.plot(timeLine, Nettogewicht,
          lw=0.5, label='Nettogewicht', color='red')
-ax1.set_xticks(np.arange(0, timeLine[-1], 1000))
-ax1.set_ylim([-5, 30])
+
+# Einstellungen für x/y-Achsen
+ax1.set_xticks(np.arange(0, timeLine[-1], 250))
+ax1.set_ylim([-2, 30])
 ax1.minorticks_on()
-ax1.yticks([0, 25, 30])
+cursor = Cursor(ax1, useblit=True, color='k', linewidth=1)
 
 for tick in ax1.get_xticklabels():
-    tick.set_rotation(45)
+    tick.set_rotation(75)
 
-
-""" 
-plt.legend(handles=[ax1], bbox_to_anchor=(2, 2),
-           bbox_transform=plt.gcf().transFigure)
-"""
-
-ax2.plot(timeLine, Entleersignal,
-         lw=0.5, label='Entleersignal', color='blue')
-ax2.set_ylim([-5, 30])
-
-""" 
-plt.legend(handles=[ax2], bbox_to_anchor=(1, 1))
-           #bbox_transform=plt.gcf().transFigure)
-"""
-
-ax3.plot(timeLine, Grobsignal,
-         lw=0.5, label='Grobsignal', color='green')
-ax3.set_ylim([-5, 30])
-
-ax4.plot(timeLine, Feinsignal,
-         lw=0.5, label='Feinsignal', color='black')
-ax4.set_ylim([-5, 30])
-
-ax5.plot(timeLine, WartenAufStillstand,
-         lw=0.5, label='WartenAufStillstand', color='yellow')
-ax5.set_ylim([-5, 30])
-
-ax6.plot(timeLine, Grobabschaltpunkt,
-         lw=0.5, label='Grobabschaltpunkt', color='orange')
-ax6.set_ylim([-5, 30])
-
-ax7.plot(timeLine, Nettoprozessgewicht,
+# Weiter Kurven hinzufügen
+ax1.plot(timeLine, Nettoprozessgewicht,
          lw=0.5, label='Nettoprozessgewicht', color='purple')
-ax7.set_ylim([-5, 30])
 
-plt.legend()
+ax1.plot(timeLine, Grobabschaltpunkt,
+         lw=0.5, label='Grobabschaltpunkt', color='orange')
 
-#ax2.set_ylim([0, 1])
-#ax2.set_yticks([0, 1])
+ax1.plot(timeLine, Feinabschaltpunkt,
+         lw=0.5, label='Feinabschaltpunkt', color='brown')
 
-#ax2.set_xticks(np.arange(0, maxLengthTimeStp, 250))
+ax1.plot(timeLine, Entleersignal,
+         lw=0.5, label='Entleersignal', color='blue')
+
+ax1.plot(timeLine, Grobsignal,
+         lw=0.5, label='Grobsignal', color='green')
+
+ax1.plot(timeLine, Feinsignal,
+         lw=0.5, label='Feinsignal', color='black')
+
+ax1.plot(timeLine, WartenAufStillstand,
+         lw=0.5, label='WartenAufStillstand', color='yellow')
 
 
+# Legende oben rechts anzeigen
+plt.legend(loc='upper right', borderaxespad=0.)
 
-
-
+# Plot beschriften
 plt.grid(linestyle='-.', linewidth='0.25', color='green')
-plt.yticks([0, 25, 30])
+plt.title('SIWAREX Trace Daten Viewer', fontstyle='italic', fontsize='large')
+plt.xlabel('Zeit in [ms]')
+plt.ylabel('Gewicht in [kg]')
+plt.yticks(np.arange(0, 32, step=5))
+
+# Alles anzeigen
 plt.show()
 
 
 # csv Datei anlegen und alle Werte speichern
 
-''' 
+'''
 NamenZusatz_2 = '_cleanFile_01'
+FileNameStr_csv = 'TraceDaten' + NamenZusatz_2 + '.csv'
 
-with open('LearnPaython_Class\EigeneProgramme\TraceDaten\TraceDaten' + NamenZusatz_2 + '.csv', 'w') as f2:
+with open(PathNameStr + FileNameStr_csv, 'w') as f2:
     for key in kurvenDaten.keys():
         f2.write("%s,%s\n" % (key, kurvenDaten[key]))
- '''
+'''
