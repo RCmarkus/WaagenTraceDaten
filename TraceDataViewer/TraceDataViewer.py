@@ -203,16 +203,19 @@ sampel_time
 
 fig, ax1 = plt.subplots()
 ax2 = ax1.twiny()
-ax3 = ax1.twiny()
-ax4 = ax1.twiny()
-ax5 = ax1.twiny()
-ax6 = ax1.twiny()
-ax7 = ax1.twiny()
+ax3 = ax1.twinx()
+ax4 = ax1.twinx()
+ax5 = ax1.twinx()
+ax6 = ax1.twinx()
+ax7 = ax1.twinx()
 
-ax1.plot(timeLine, Nettogewicht, timeLine, Entleersignal, timeLine, Grobsignal,
+ax1.plot(timeLine, Nettogewicht,
          lw=0.5, label='Nettogewicht', color='red')
 ax1.set_xticks(np.arange(0, timeLine[-1], 1000))
-ax1.set_ylim([-2, 30])
+ax1.set_ylim([-5, 30])
+ax1.minorticks_on()
+ax1.yticks([0, 25, 30])
+
 for tick in ax1.get_xticklabels():
     tick.set_rotation(45)
 
@@ -220,33 +223,36 @@ for tick in ax1.get_xticklabels():
 """ 
 plt.legend(handles=[ax1], bbox_to_anchor=(2, 2),
            bbox_transform=plt.gcf().transFigure)
-
-
-ax2.plot(Entleersignal,
-         lw=0.5, label='Entleersignal', color='blue')
 """
+
+ax2.plot(timeLine, Entleersignal,
+         lw=0.5, label='Entleersignal', color='blue')
+ax2.set_ylim([-5, 30])
 
 """ 
 plt.legend(handles=[ax2], bbox_to_anchor=(1, 1))
            #bbox_transform=plt.gcf().transFigure)
-
-
-ax3.plot(Grobsignal,
-         lw=0.5, label='Grobsignal', color='green')
-
-
-ax4.plot(Feinsignal,
-         lw=0.5, label='Feinsignal', color='black')
-
-ax5.plot(WartenAufStillstand,
-         lw=0.5, label='WartenAufStillstand', color='yellow')
-
-ax6.plot(Grobabschaltpunkt,
-         lw=0.5, label='Grobabschaltpunkt', color='orange')
-
-ax7.plot(Nettoprozessgewicht,
-         lw=0.5, label='Nettoprozessgewicht', color='purple')
 """
+
+ax3.plot(timeLine, Grobsignal,
+         lw=0.5, label='Grobsignal', color='green')
+ax3.set_ylim([-5, 30])
+
+ax4.plot(timeLine, Feinsignal,
+         lw=0.5, label='Feinsignal', color='black')
+ax4.set_ylim([-5, 30])
+
+ax5.plot(timeLine, WartenAufStillstand,
+         lw=0.5, label='WartenAufStillstand', color='yellow')
+ax5.set_ylim([-5, 30])
+
+ax6.plot(timeLine, Grobabschaltpunkt,
+         lw=0.5, label='Grobabschaltpunkt', color='orange')
+ax6.set_ylim([-5, 30])
+
+ax7.plot(timeLine, Nettoprozessgewicht,
+         lw=0.5, label='Nettoprozessgewicht', color='purple')
+ax7.set_ylim([-5, 30])
 
 plt.legend()
 
