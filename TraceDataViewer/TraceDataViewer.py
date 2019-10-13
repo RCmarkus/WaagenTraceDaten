@@ -39,9 +39,9 @@ def DateiBereinigen(PathName, FileName, Dict_Name, removeChar=None, replaceByCha
     # Datei öffnen und alle nicht benötigten Zeichen entfernen
     try:
         with open(Dateiname, 'r') as txt_File:
-            for n in txt_File:
+            for line in txt_File:
                 # alle nicht benötigten Zeichen entfernen
-                textStr = n.replace(removeChar, replaceByChar)
+                textStr = line.replace(removeChar, replaceByChar)
                 ListName.append(textStr)
     except:
         msgBox.showerror(
@@ -132,6 +132,10 @@ def werteAuslesen(Dict_Name, KeyString, ValueList, isSignalStatus=('No', 'Yes'))
                 ValueList.append(0)
 
 
+#
+# ---------------------- Path und Dateinamen festlegen ---------------------------------
+#
+
 PathNameStr = 'TraceDataViewer\\TraceDaten\\'  # nur zum Test in Python
 # PathNameStr = 'TraceDaten\\' #für die .exe Datei
 FileNameStr = 'WaageA_TraceData.txt'
@@ -144,7 +148,6 @@ DateiBereinigen(PathNameStr, FileNameStr, kurvenDaten,
 #
 # ---------------------- Kurven auswerten und anlegen ----------------------------------
 #
-
 
 # Listen für Kurven anlegen
 Zeitstempel = []
