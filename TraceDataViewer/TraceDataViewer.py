@@ -78,10 +78,11 @@ def csvDateierstellen():
 def ZeitstempelAuslesen(Dict_Name, KeyString, timeList):
     """Zeiststempel auslesen
 
-    Args:
-        Dict_Name {(string)}: Dictionary aus dem gelesen werden soll
-        KeyString {(string)}: um den Zeitstempel im Dictionary zu finden
-        timeList {(list)}: das Ergebnis in eine Liste eintragen
+    Args:\n
+    \n
+        Dict_Name {(string)}: Dictionary aus dem gelesen werden soll\n
+        KeyString {(string)}: um den Zeitstempel im Dictionary zu finden\n
+        timeList {(list)}: das Ergebnis in eine Liste eintragen\n
     """
     # '''
     # Zeiststempel auslesen\n
@@ -113,16 +114,16 @@ def ZeitstempelAuslesen(Dict_Name, KeyString, timeList):
 def werteAuslesen(Dict_Name, KeyString, ValueList, isSignalStatus=('No', 'Yes')):
     """Werte auslesen
 
-    Arguments:
-        Dict_Name {dict} -- Dictionary aus dem die Werte gelesen werden sollen
-        KeyString {string} -- um den Zeitstempel im Dictionary zu fenden
-        ValueList {list} -- die Ergebnise in eine Liste eintragen
+    Arguments:\n
+        Dict_Name {dict} -- Dictionary aus dem die Werte gelesen werden sollen\n
+        KeyString {string} -- um den Zeitstempel im Dictionary zu fenden\n
+        ValueList {list} -- die Ergebnise in eine Liste eintragen\n
 
-    Keyword Arguments:
-        isSignalStatus {tuple} -- Messwert oder Signal
-                                    No = Werte werden als float-Werte zurück gegeben
-                                    Yes = Werte sind binär und werden für den Graph entsprechend skaliert
-                                                            '0' = 0  und '1' = 25 (default: {('No', 'Yes')})
+    Keyword Arguments:\n
+        isSignalStatus {tuple} -- Messwert oder Signal\n
+                                    No = Werte werden als float-Werte zurück gegeben\n
+                                    Yes = Werte sind binär und werden für den Graph entsprechend skaliert\n
+                                    '0' = 0  und '1' = 25 (default: {('No', 'Yes')})\n
     """
     DictStringValues = []
     DictStringValues.append(Dict_Name[KeyString])
