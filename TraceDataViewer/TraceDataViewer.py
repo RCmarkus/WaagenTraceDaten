@@ -5,9 +5,6 @@ Version: V1.1
 
 20.09.2019
 copyright Markus Rychlik ©2020
-
-
-
 """
 
 import sys
@@ -27,15 +24,32 @@ kurvenDaten = defaultdict(list)
 
 
 def DateiBereinigen(PathName, FileName, Dict_Name, removeChar=None, replaceByChar=None, removeEmptyLine=None):
+    """Mit dieser Funktion wird die Datei eingelesen und bestimmte Zeichen entfernt
+
+    Parameters
+    ----------
+    PathName : string\n
+        Path zur der Datei die geöffnet werden soll\n
+    FileName : string\n
+        Dateiname von der Datei die geöffnet werden soll\n
+    Dict_Name : dict\n
+        Dictionary hier werden die bereinigten Daten gespeichert\n
+    removeChar : string, optional\n
+        die Zeichenfolge die entfernt werden soll, by default None\n
+    replaceByChar : string, optional\n
+        mit diesem Zeichen soll ersetzt werden, by default None\n
+    removeEmptyLine : string, optional\n
+        mit diesen Zeichen sind leere Zeilen gekennzeichnet, by default None\n
     """
-    Mit dieser Function wird die Datei eingelesen und bestimmte 
-    Zeichen entfernt.\n
-    'Dateiname' = die Datei die geöffnet werden soll\n
-    'Dict_Name' = Dictionary hier werden die bereinigeten Daten geschrieben\n
-    'removeChat' = 1.Zeichen das entfernt werden sollen\n
-    'replaceByChar' = mit diesem Zeichen soll das zu entferne Zeichen ersetzt werden\n
-    'removeEmptyLine' = wie sind leere Zeilen gekenntzeichnet\n
-    """
+    # """
+    # Mit dieser Function wird die Datei eingelesen und bestimmte
+    # Zeichen entfernt.\n
+    # 'Dateiname' = die Datei die geöffnet werden soll\n
+    # 'Dict_Name' = Dictionary hier werden die bereinigeten Daten geschrieben\n
+    # 'removeChat' = 1.Zeichen das entfernt werden sollen\n
+    # 'replaceByChar' = mit diesem Zeichen soll das zu entferne Zeichen ersetzt werden\n
+    # 'removeEmptyLine' = wie sind leere Zeilen gekenntzeichnet\n
+    # """
     ListName = []
     Spalte_main = []
     Dateiname = PathName + FileName
@@ -114,7 +128,7 @@ def ZeitstempelAuslesen(Dict_Name, KeyString, timeList):
 def werteAuslesen(Dict_Name, KeyString, ValueList, isSignalStatus=('No', 'Yes')):
     """Werte auslesen
 
-    Arguments:\n
+    Arguments: \n
         Dict_Name {dict} -- Dictionary aus dem die Werte gelesen werden sollen\n
         KeyString {string} -- um den Zeitstempel im Dictionary zu fenden\n
         ValueList {list} -- die Ergebnise in eine Liste eintragen\n
