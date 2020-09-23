@@ -1,10 +1,13 @@
 """
-Version: V1.0
+Version: V1.1
     Programm um TraceDaten von der SIEMENS SIWAREX FTA auszuwerten
     als erstes wird eine .txt eingelesen
 
 20.09.2019
-copyright Markus Rychlik ©2019
+copyright Markus Rychlik ©2020
+
+
+
 """
 
 import sys
@@ -73,12 +76,19 @@ def csvDateierstellen():
 
 
 def ZeitstempelAuslesen(Dict_Name, KeyString, timeList):
-    '''
-    Zeiststempel auslesen\n
-    'Dict_Name' = Dictionary aus dem gelesen werden soll\n
-    'KeyString' = um den Zeitstempel im Dictionary zu finden\n
-    'timeList' = das Ergebnis in eine Liste eintragen\n
-    '''
+    """Zeiststempel auslesen
+
+    Args:
+        Dict_Name {(string)}: Dictionary aus dem gelesen werden soll
+        KeyString {(string)}: um den Zeitstempel im Dictionary zu finden
+        timeList {(list)}: das Ergebnis in eine Liste eintragen
+    """
+    # '''
+    # Zeiststempel auslesen\n
+    # 'Dict_Name' = Dictionary aus dem gelesen werden soll\n
+    # 'KeyString' = um den Zeitstempel im Dictionary zu finden\n
+    # 'timeList' = das Ergebnis in eine Liste eintragen\n
+    # '''
     DictStringValues = []
     DictStringValues.append(Dict_Name[KeyString])
     ValueString = DictStringValues[0]
@@ -101,16 +111,19 @@ def ZeitstempelAuslesen(Dict_Name, KeyString, timeList):
 
 
 def werteAuslesen(Dict_Name, KeyString, ValueList, isSignalStatus=('No', 'Yes')):
-    '''
-    Werte Auslesen\n
+    """Werte auslesen
 
-    'Dict_Name' = Dictionary aus dem gelesen werden soll\n
-    'KeyString' = um den Zeitstempel im Dictionary zu finden\n
-    'ValueList' = das Ergebnis in eine Liste eintragen\n
-    'isSignalStatus' = No/Yes\n
-            No = Werte werden als float-Werte zurückgegeben\n
-            Yes = Werte sind binär und werden entsprechend skaliert '0'=0 und '1'=25\n
-    '''
+    Arguments:
+        Dict_Name {dict} -- Dictionary aus dem die Werte gelesen werden sollen
+        KeyString {string} -- um den Zeitstempel im Dictionary zu fenden
+        ValueList {list} -- die Ergebnise in eine Liste eintragen
+
+    Keyword Arguments:
+        isSignalStatus {tuple} -- Messwert oder Signal
+                                    No = Werte werden als float-Werte zurück gegeben
+                                    Yes = Werte sind binär und werden für den Graph entsprechend skaliert
+                                                            '0' = 0  und '1' = 25 (default: {('No', 'Yes')})
+    """
     DictStringValues = []
     DictStringValues.append(Dict_Name[KeyString])
     ValueString = DictStringValues[0]
@@ -161,6 +174,7 @@ Feinsignal = []
 WartenAufStillstand = []
 gefilterter_Digitwert = []
 ungefilterterADC_Wert = []
+
 
 # Zeitstempel auslesen
 ZeitstempelAuslesen(kurvenDaten, 'Zeitstempel', Zeitstempel)
